@@ -1,0 +1,86 @@
+version: '2'
+services:
+  nginx:
+    image: nginx:1.13.3-alpine
+    container_name: ${SERVICE_NAME}-nginx
+    ports:
+      - ${VIRTUAL_PORT}:80
+    restart: always
+    tty: false
+    env_file: .env
+    links:
+      - wordpress
+      - mysql
+    volumes_from:
+      - wordpress
+    volumes:
+      - ./setting/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./setting/nginx/conf:/etc/nginx/conf/:ro
+      - ./setting/nginx/htpasswd:/etc/nginx/htpasswd/:ro
+    networks:
+      - front
+      - back
+
+  wordpress:
+    build: ./docker/wordpress
+    container_name: ${SERVICE_NAME}-wordpress
+    ports:
+      - ${WORDPRESS_PORT}:9000
+    restart: always
+    tty: false
+    env_file: .env
+    volumes_from:
+      - data
+    volumes:
+      - ./setting/wordpress:/usr/local/etc/php:ro
+      - ./theme:/var/www/html/wp-content/themes/a:ro
+    networks:
+      - back
+
+  mysql:
+    image: mysql:5.7.19
+    container_name: ${SERVICE_NAME}-mysql
+    ports:
+      - ${MYSQL_PORT}:3306
+    restart: always
+    tty: false
+    env_file: .env
+    volumes_from:
+      - data
+    networks:
+      - back
+
+  data:
+    image: busybox:1.27.1-musl
+    container_name: ${SERVICE_NAME}-data
+    volumes:
+      - data-db:/var/lib/mysql
+      - data-wp:/var/www/html
+      - ./backup:/backup
+    networks:
+      - back
+
+  wpcli:
+    image: tatemz/wp-cli
+    container_name: ${SERVICE_NAME}-wpcli
+    volumes_from:
+      - data
+    entrypoint: wp
+    command: '--info'
+    networks:
+      - back
+
+volumes:
+  data-db:
+    external:
+      name: ${DB_VOLUME_NAME}
+  data-wp:
+    external:
+      name: ${WP_VOLUME_NAME}
+
+networks:
+  front:
+    external: true
+  back:
+    external:
+      name: back-${SERVICE_NAME}
