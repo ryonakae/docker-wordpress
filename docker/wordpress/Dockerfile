@@ -1,4 +1,4 @@
-FROM wordpress:4.8.1-php7.1-fpm
+FROM wordpress:4-php7.1-fpm-alpine
 
 # 不足してるPHPライブラリをインストール
 RUN apt-get update && apt-get install -y \
