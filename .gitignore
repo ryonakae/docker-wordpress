@@ -5,6 +5,6 @@ logs
 
 .env
 backup
-theme/*
+theme
 
 !.gitkeep
