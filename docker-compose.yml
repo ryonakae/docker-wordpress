@@ -5,13 +5,15 @@ services:
     image: nginx:1.13.5-alpine
     ports:
       - ${VIRTUAL_PORT}:80
+    restart: always
+    tty: true
     env_file: .env
     volumes:
       - data-wp:/var/www/html:ro
-      - data-db:/var/lib/mysql:ro
       - ./setting/nginx/conf.d:/etc/nginx/conf.d:ro
       - ./setting/nginx/conf:/etc/nginx/conf/:ro
       - ./setting/nginx/htpasswd:/etc/nginx/htpasswd/:ro
+      - ${THEME_DIRECTORY}:/var/www/html/wp-content/themes/${THEME_NAME}:ro
     networks:
       - front
       - back
@@ -20,9 +22,11 @@ services:
     build: ./docker/wordpress
     ports:
       - 9000
+    restart: always
+    tty: true
     env_file: .env
     volumes:
-      - data-wp:/var/www/html
+      - data-wp:/var/www/html:rw
       - ./setting/wordpress:/usr/local/etc/php:ro
       - ${THEME_DIRECTORY}:/var/www/html/wp-content/themes/${THEME_NAME}:ro
     networks:
@@ -32,19 +36,11 @@ services:
     image: mysql:5.7.19
     ports:
       - 3306
+    restart: always
+    tty: true
     env_file: .env
     volumes:
       - data-db:/var/lib/mysql:rw
-    networks:
-      - back
-
-  data:
-    image: busybox:musl
-    tty: true
-    volumes:
-      - data-wp:/var/www/html:rw
-      - data-db:/var/lib/mysql:rw
-      - ./backup:/backup:rw
     networks:
       - back
 
@@ -57,6 +53,16 @@ services:
       - ./backup:/backup:rw
     entrypoint: wp
     command: '--info'
+    networks:
+      - back
+
+  data:
+    image: busybox:musl
+    tty: true
+    volumes:
+      - data-wp:/var/www/html:rw
+      - data-db:/var/lib/mysql:rw
+      - ./backup:/backup:rw
     networks:
       - back
 

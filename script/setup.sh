@@ -4,12 +4,14 @@
 docker-compose run --rm wpcli core language install ja
 docker-compose run --rm wpcli core language activate ja
 
+# change permalink setting
+docker-compose run --rm wpcli rewrite structure '/post/%post_id%'
+
 # delete default theme
 docker-compose run --rm wpcli theme delete \
   twentyfifteen \
   twentyseventeen \
   twentysixteen
-
 
 # delete default plugin
 docker-compose run --rm wpcli plugin delete \
@@ -23,8 +25,8 @@ docker-compose run --rm wpcli plugin install --activate \
   jetpack-markdown \
   disable-comments
 
-# Advanced Custom FieldsとRepeater Fieldを有効にする場合は以下をコメントアウト
-# docker-compose run --rm wpcli plugin install --activate \
-#   acf-to-rest-api \
-#   advanced-custom-fields \
-#   https://cl.ly/3S0C2G3T3w1z/download/acf-repeater.zip \
+# install Advanced Custom Fields & Repeater Field
+docker-compose run --rm wpcli plugin install \
+  acf-to-rest-api \
+  advanced-custom-fields \
+  https://cl.ly/3S0C2G3T3w1z/download/acf-repeater.zip
