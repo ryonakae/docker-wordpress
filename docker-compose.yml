@@ -2,7 +2,6 @@ version: '3'
 
 services:
   nginx:
-    container_name: ${SERVICE_NAME}-nginx
     image: nginx:1.13.5-alpine
     ports:
       - ${VIRTUAL_PORT}:80
@@ -20,7 +19,6 @@ services:
       - back
 
   wordpress:
-    container_name: ${SERVICE_NAME}-wordpress
     build: ./docker/wordpress
     ports:
       - 9000
@@ -35,7 +33,6 @@ services:
       - back
 
   mysql:
-    container_name: ${SERVICE_NAME}-mysql
     image: mysql:5.7.19
     ports:
       - 3306
@@ -48,7 +45,6 @@ services:
       - back
 
   wpcli:
-    container_name: ${SERVICE_NAME}-wpcli
     image: tatemz/wp-cli
     tty: true
     volumes:
@@ -61,7 +57,6 @@ services:
       - back
 
   data:
-    container_name: ${SERVICE_NAME}-data
     image: busybox:musl
     tty: true
     volumes:
