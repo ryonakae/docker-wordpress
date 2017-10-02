@@ -6,7 +6,6 @@ services:
     ports:
       - ${VIRTUAL_PORT}:80
     restart: always
-    tty: true
     env_file: .env
     volumes:
       - data-wp:/var/www/html:ro
@@ -23,7 +22,6 @@ services:
     ports:
       - 9000
     restart: always
-    tty: true
     env_file: .env
     volumes:
       - data-wp:/var/www/html:rw
@@ -37,7 +35,6 @@ services:
     ports:
       - 3306
     restart: always
-    tty: true
     env_file: .env
     volumes:
       - data-db:/var/lib/mysql:rw
@@ -46,7 +43,6 @@ services:
 
   wpcli:
     image: tatemz/wp-cli
-    tty: true
     volumes:
       - data-wp:/var/www/html:rw
       - data-db:/var/lib/mysql:rw
@@ -58,7 +54,6 @@ services:
 
   data:
     image: busybox:musl
-    tty: true
     volumes:
       - data-wp:/var/www/html:rw
       - data-db:/var/lib/mysql:rw
