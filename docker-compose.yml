@@ -69,10 +69,10 @@ services:
 volumes:
   data-wp:
     external:
-      name: ${WP_VOLUME_NAME}
+      name: ${COMPOSE_PROJECT_NAME}-wp
   data-db:
     external:
-      name: ${DB_VOLUME_NAME}
+      name: ${COMPOSE_PROJECT_NAME}-db
 
 networks:
   front:
