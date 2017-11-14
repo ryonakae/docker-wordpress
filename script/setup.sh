@@ -1,13 +1,5 @@
 #!/bin/sh
 
-# core install
-docker-compose run --rm wpcli core install \
-  --url=test.dev \
-  --title=test \
-  --admin_user=admin \
-  --admin_password=password \
-  --admin_email=mail@example.com
-
 # install & activate japanese lang file
 docker-compose run --rm wpcli core language install ja
 docker-compose run --rm wpcli core language activate ja
