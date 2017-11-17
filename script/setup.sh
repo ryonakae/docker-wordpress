@@ -10,8 +10,8 @@ docker-compose run --rm wpcli rewrite structure '/post/%post_id%'
 # delete default theme
 docker-compose run --rm wpcli theme delete \
   twentyfifteen \
-  twentyseventeen \
-  twentysixteen
+  twentysixteen \
+  twentyseventeen
 
 # delete default plugin
 docker-compose run --rm wpcli plugin delete \
@@ -23,7 +23,9 @@ docker-compose run --rm wpcli plugin install --activate \
   update-control \
   wp-multibyte-patch \
   jetpack-markdown \
-  disable-comments
+  disable-comments \
+  auto-cloudinary \
+  force-regenerate-thumbnails
 
 # install Advanced Custom Fields & Repeater Field
 docker-compose run --rm wpcli plugin install \
